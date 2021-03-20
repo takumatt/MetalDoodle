@@ -27,3 +27,19 @@ extension CGPoint {
     )
   }
 }
+
+extension Math.Linear {
+  static func equation(
+    through p: CGPoint,
+    and     q: CGPoint
+  ) ->  (a: CGFloat, b: CGFloat) {
+    Self.equation(through: (x: p.x, y: p.y), and: (x: q.x, y: q.y))
+  }
+  
+  static func slope(
+    through p: CGPoint,
+    and     q: CGPoint
+  ) -> CGFloat {
+    Self.slope(through: (x: p.x, y: p.y), and: (x: q.x, y: q.y))
+  }
+}

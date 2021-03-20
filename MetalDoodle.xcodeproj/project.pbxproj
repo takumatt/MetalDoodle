@@ -17,6 +17,9 @@
 		C339A77F25F1EAC30024D048 /* MetalDoodleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C339A77E25F1EAC30024D048 /* MetalDoodleUITests.swift */; };
 		C339A79025F1EB540024D048 /* DoodleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C339A78F25F1EB540024D048 /* DoodleView.swift */; };
 		C37616512606055E008756B5 /* CGPoint+.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37616502606055E008756B5 /* CGPoint+.swift */; };
+		C376165E260630A5008756B5 /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = C376165D260630A5008756B5 /* Math.swift */; };
+		C3AFD432260655A2001EB1D6 /* WeightedPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3AFD431260655A2001EB1D6 /* WeightedPoint.swift */; };
+		C3AFD437260655C5001EB1D6 /* Misc.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3AFD436260655C5001EB1D6 /* Misc.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +56,9 @@
 		C339A78025F1EAC30024D048 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C339A78F25F1EB540024D048 /* DoodleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoodleView.swift; sourceTree = "<group>"; };
 		C37616502606055E008756B5 /* CGPoint+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGPoint+.swift"; sourceTree = "<group>"; };
+		C376165D260630A5008756B5 /* Math.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
+		C3AFD431260655A2001EB1D6 /* WeightedPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightedPoint.swift; sourceTree = "<group>"; };
+		C3AFD436260655C5001EB1D6 /* Misc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Misc.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +114,9 @@
 				C339A76025F1EAC20024D048 /* ContentView.swift */,
 				C339A78F25F1EB540024D048 /* DoodleView.swift */,
 				C37616502606055E008756B5 /* CGPoint+.swift */,
+				C3AFD431260655A2001EB1D6 /* WeightedPoint.swift */,
+				C376165D260630A5008756B5 /* Math.swift */,
+				C3AFD436260655C5001EB1D6 /* Misc.swift */,
 				C339A76225F1EAC30024D048 /* Assets.xcassets */,
 				C339A76725F1EAC30024D048 /* LaunchScreen.storyboard */,
 				C339A76A25F1EAC30024D048 /* Info.plist */,
@@ -273,10 +282,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				C339A75D25F1EAC20024D048 /* AppDelegate.swift in Sources */,
+				C3AFD437260655C5001EB1D6 /* Misc.swift in Sources */,
 				C339A75F25F1EAC20024D048 /* SceneDelegate.swift in Sources */,
 				C339A76125F1EAC20024D048 /* ContentView.swift in Sources */,
 				C339A79025F1EB540024D048 /* DoodleView.swift in Sources */,
 				C37616512606055E008756B5 /* CGPoint+.swift in Sources */,
+				C3AFD432260655A2001EB1D6 /* WeightedPoint.swift in Sources */,
+				C376165E260630A5008756B5 /* Math.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
