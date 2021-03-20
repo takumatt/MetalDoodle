@@ -15,6 +15,8 @@
 		C339A76925F1EAC30024D048 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C339A76725F1EAC30024D048 /* LaunchScreen.storyboard */; };
 		C339A77425F1EAC30024D048 /* MetalDoodleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C339A77325F1EAC30024D048 /* MetalDoodleTests.swift */; };
 		C339A77F25F1EAC30024D048 /* MetalDoodleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C339A77E25F1EAC30024D048 /* MetalDoodleUITests.swift */; };
+		C339A79025F1EB540024D048 /* DoodleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C339A78F25F1EB540024D048 /* DoodleView.swift */; };
+		C37616512606055E008756B5 /* CGPoint+.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37616502606055E008756B5 /* CGPoint+.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +51,8 @@
 		C339A77A25F1EAC30024D048 /* MetalDoodleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MetalDoodleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C339A77E25F1EAC30024D048 /* MetalDoodleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalDoodleUITests.swift; sourceTree = "<group>"; };
 		C339A78025F1EAC30024D048 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C339A78F25F1EB540024D048 /* DoodleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoodleView.swift; sourceTree = "<group>"; };
+		C37616502606055E008756B5 /* CGPoint+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGPoint+.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +106,8 @@
 				C339A75C25F1EAC20024D048 /* AppDelegate.swift */,
 				C339A75E25F1EAC20024D048 /* SceneDelegate.swift */,
 				C339A76025F1EAC20024D048 /* ContentView.swift */,
+				C339A78F25F1EB540024D048 /* DoodleView.swift */,
+				C37616502606055E008756B5 /* CGPoint+.swift */,
 				C339A76225F1EAC30024D048 /* Assets.xcassets */,
 				C339A76725F1EAC30024D048 /* LaunchScreen.storyboard */,
 				C339A76A25F1EAC30024D048 /* Info.plist */,
@@ -269,6 +275,8 @@
 				C339A75D25F1EAC20024D048 /* AppDelegate.swift in Sources */,
 				C339A75F25F1EAC20024D048 /* SceneDelegate.swift in Sources */,
 				C339A76125F1EAC20024D048 /* ContentView.swift in Sources */,
+				C339A79025F1EB540024D048 /* DoodleView.swift in Sources */,
+				C37616512606055E008756B5 /* CGPoint+.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
