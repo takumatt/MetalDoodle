@@ -8,17 +8,20 @@
 import SwiftUI
 
 struct ContentView: View {
-    var body: some View {
-      VStack {
-        Text("Hello, world!")
-            .padding()
-        DoodleView()
+  let doodleView = DoodleView()
+  var body: some View {
+    VStack {
+      Button("clear") {
+        doodleView.clear()
       }
+      .padding()
+      doodleView
     }
+  }
 }
 
 struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-    }
+  static var previews: some View {
+    ContentView()
+  }
 }

@@ -9,14 +9,35 @@ import UIKit
 
 extension CGPoint {
   
+  func add(_ point: CGPoint) -> CGPoint {
+    .init(
+      x: x + point.x,
+      y: y + point.y
+    )
+  }
+  
+  func mul(_ value: CGFloat) -> CGPoint {
+    .init(
+      x: x * value,
+      y: y * value
+    )
+  }
+  
+  func div(_ value: CGFloat) -> CGPoint {
+    .init(
+      x: x / value,
+      y: y / value
+    )
+  }
+  
   func euclideanDistance(to point: CGPoint) -> CGFloat {
     return sqrt(pow(x - point.x, 2) + pow(y - point.y, 2))
   }
   
   func distance(to point: CGPoint) -> CGPoint {
     return .init(
-      x: x - point.x,
-      y: y - point.y
+      x: point.x - x,
+      y: point.y - y
     )
   }
   

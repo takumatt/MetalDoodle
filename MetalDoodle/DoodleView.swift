@@ -10,16 +10,22 @@ import SwiftUI
 
 struct DoodleView: UIViewRepresentable {
   
+  private let bodyView = DoodleBodyView()
+  
   init() {
-    
+  
   }
   
   func makeUIView(context: Context) -> some UIView {
-    DoodleBodyView()
+    return bodyView
   }
   
   func updateUIView(_ uiView: UIViewType, context: Context) {
     
+  }
+  
+  func clear() {
+    bodyView.clear()
   }
 }
 
@@ -34,7 +40,7 @@ class DoodleBodyView: UIView {
   }()
   
   private var path: UIBezierPath = .init()
-  private var previousPoint: WeightedPoint = .init(current: .init(x: 1, y: 1), previous: .init(x: 2, y: 2))
+  private var previousPoint: WeightedPoint = .init(current: .init(x: 1, y: 1), previous: .init(x: 2, y: 2), height: .zero)
   
   init() {
     super.init(frame: .zero)
@@ -46,6 +52,9 @@ class DoodleBodyView: UIView {
     fatalError("init(coder:) has not been implemented")
   }
   
+  func clear() {
+    path.removeAllPoints()
+  }
   
   override func layoutSubviews() {
     super.layoutSubviews()
@@ -61,9 +70,9 @@ class DoodleBodyView: UIView {
     
     let point = touch.location(in: self)
     
-    path.move(to: point)
+//    path.move(to: point)
     
-    previousPoint = .init(current: point, previous: previousPoint.origin)
+    previousPoint = .init(current: point, previous: previousPoint.origin, height: self.frame.height)
   }
   
   override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -74,20 +83,28 @@ class DoodleBodyView: UIView {
     
     let point = touch.location(in: self)
     
-//    print("###", point.distance(to: lastPoint), point.euclideanDistance(to: lastPoint))
-//
-//    print("@@@", Math.Linear.equation(through: (x: 1, y: 1), and: (x: 2, y: 2)))
+    let weightedPoint = WeightedPoint(current: point, previous: previousPoint.origin, height: self.frame.height)
     
-    let weightedPoint = WeightedPoint(current: point, previous: previousPoint.origin)
+//    let rect = UIBezierPath(rect: .init(x: weightedPoint.origin.x - 1, y: weightedPoint.origin.y - 1, width: 2, height: 2))
+//    UIColor.red.setFill()
+//    rect.fill()
+//    path.append(rect)
+//
+//    let rectA = UIBezierPath(rect: .init(x: weightedPoint.a.x - 1, y: weightedPoint.a.y - 1, width: 2, height: 2))
+//    UIColor.green.setFill()
+//    rect.fill()
+//    path.append(rectA)
+//
+//    let rectB = UIBezierPath(rect: .init(x: weightedPoint.b.x - 1, y: weightedPoint.b.y - 1, width: 2, height: 2))
+//    UIColor.blue.setFill()
+//    rect.fill()
+//    path.append(rectB)
     
     path.move(to: previousPoint.a)
     path.addLine(to: previousPoint.b)
-    path.addQuadCurve(to: weightedPoint.b, controlPoint: previousPoint.b.average(with: weightedPoint.b))
+    path.addLine(to: weightedPoint.b)
     path.addLine(to: weightedPoint.a)
-    path.addQuadCurve(to: weightedPoint.a, controlPoint: previousPoint.a.average(with: weightedPoint.a))
-    path.move(to: weightedPoint.a)
-    
-    print("### \(weightedPoint)")
+    path.addLine(to: previousPoint.a)
     
     previousPoint = weightedPoint
   }
@@ -100,12 +117,6 @@ class DoodleBodyView: UIView {
     
     let point = touch.location(in: self)
     
-    path.addLine(to: point)
-    
-    path.close()
-    
     bezierPathLayer.path = path.cgPath
-    
-    previousPoint = .init(current: point, previous: previousPoint.origin)
   }
 }

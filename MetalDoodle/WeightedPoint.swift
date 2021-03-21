@@ -9,35 +9,42 @@ import CoreGraphics
 
 struct WeightedPoint {
   
-  //static let zero: Self = .zero
-  
-  static let maxWeight: CGFloat = 5.0
+  static let baseWeight: CGFloat = 5.0
+//  static let minWeight: CGFloat = 1.0
+//  static let maxWeight: CGFloat = 5.0
+
+  static let maxLength: CGFloat = 50.0
   
   let origin: CGPoint
   let a: CGPoint
   let b: CGPoint
-  
   let weight: CGFloat
   
   init(
     current  p: CGPoint,
     previous q: CGPoint,
-    weight: CGFloat = 3 // tmp
+    height: CGFloat
   ) {
     
-    let slope = Math.Linear.slope(through: p, and: q)
-    let inverted = -slope
-    let x = weight * sin(inverted)
-    let y = weight * cos(inverted)
+    let relative = p.distance(to: q)
+    let length = p.euclideanDistance(to: q)
     
-    let qa_x = p.x - x
-    let qa_y = p.y - y
-    let qb_x = p.x + x
-    let qb_y = p.y - y
+    weight: do {
+      let lengthForWeight = length > Self.maxLength ? Self.maxLength : length
+      self.weight = Self.baseWeight - lengthForWeight * 0.1
+      print("### \(lengthForWeight) \(weight)")
+    }
     
-    self.origin = p
-    self.a = .init(x: qa_x, y: qa_y)
-    self.b = .init(x: qb_x, y: qb_y)
-    self.weight = weight
+    weightedPoint: do {
+      var relative_b: CGPoint = .init(x:  relative.y,  y: -relative.x)
+      var relative_a: CGPoint = .init(x: -relative.y,  y:  relative.x)
+      
+      relative_a = relative_a.mul(weight / 2).div(length)
+      relative_b = relative_b.mul(weight / 2).div(length)
+      
+      self.origin = p
+      self.a = origin.add(relative_a)
+      self.b = origin.add(relative_b)
+    }
   }
 }
