@@ -39,8 +39,10 @@ class DoodleBodyView: UIView {
     return layer
   }()
   
+  private let weightProvider: SimpleWeightProvider = .init()
+  
   private var path: UIBezierPath = .init()
-  private var previousPoint: WeightedPoint = .init(current: .init(x: 1, y: 1), previous: .init(x: 2, y: 2))
+  private var previousPoint: WeightedPoint = .zero
   
   init() {
     super.init(frame: .zero)
@@ -72,7 +74,7 @@ class DoodleBodyView: UIView {
     
 //    path.move(to: point)
     
-    previousPoint = .init(current: point, previous: previousPoint.origin)
+    previousPoint = .init(current: point, previous: previousPoint.origin, weightProvider: weightProvider)
   }
   
   override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -83,7 +85,7 @@ class DoodleBodyView: UIView {
     
     let point = touch.location(in: self)
     
-    let weightedPoint = WeightedPoint(current: point, previous: previousPoint.origin)
+    let weightedPoint = WeightedPoint(current: point, previous: previousPoint.origin, weightProvider: weightProvider)
     
 //    let rect = UIBezierPath(rect: .init(x: weightedPoint.origin.x - 1, y: weightedPoint.origin.y - 1, width: 2, height: 2))
 //    UIColor.red.setFill()

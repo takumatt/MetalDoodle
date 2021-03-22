@@ -22,13 +22,52 @@ struct YUpCGPoint {
   }
 }
 
+protocol WeightProvider {
+  
+  var base: CGFloat { get }
+  var min: CGFloat { get }
+  var max: CGFloat { get }
+  
+  func weight(distance: CGFloat) -> CGFloat
+}
+
+extension WeightProvider {
+  
+  func weight(distance: CGFloat) -> CGFloat {
+    
+    let gain: CGFloat = 3
+    
+    func sigmoid(x: CGFloat) -> CGFloat {
+      (tanh(gain * x / 2) + 1) / 2
+    }
+    
+    let mapped = (distance - max) / max
+    let weight = base * sigmoid(x: -mapped)
+    
+    return weight
+  }
+}
+
+class SimpleWeightProvider: WeightProvider {
+  
+  var base: CGFloat
+  var min: CGFloat
+  var max: CGFloat
+  
+  init(
+    base: CGFloat = 10,
+    min: CGFloat = 0,
+    max: CGFloat = 50
+  ) {
+    self.base = base
+    self.min = min
+    self.max = max
+  }
+}
+
 struct WeightedPoint {
   
-  static let baseWeight: CGFloat = 5.0
-//  static let minWeight: CGFloat = 1.0
-//  static let maxWeight: CGFloat = 5.0
-
-  static let maxLength: CGFloat = 50.0
+  static let zero: Self = .init()
   
   let origin: CGPoint
   let a: CGPoint
@@ -37,27 +76,30 @@ struct WeightedPoint {
   
   init(
     current  p: CGPoint,
-    previous q: CGPoint
+    previous q: CGPoint,
+    weightProvider: WeightProvider
   ) {
     
     let relative = p.distance(to: q)
     let length = p.euclideanDistance(to: q)
     
-    weight: do {
-      let lengthForWeight = length > Self.maxLength ? Self.maxLength : length
-      self.weight = Self.baseWeight - lengthForWeight * 0.1
-    }
+    self.weight = weightProvider.weight(distance: length)
     
-    weightedPoint: do {
-      var relative_b: CGPoint = .init(x:  relative.y,  y: -relative.x)
-      var relative_a: CGPoint = .init(x: -relative.y,  y:  relative.x)
-      
-      relative_a = relative_a.mul(weight / 2).div(length)
-      relative_b = relative_b.mul(weight / 2).div(length)
-      
-      self.origin = p
-      self.a = origin.add(relative_a)
-      self.b = origin.add(relative_b)
-    }
+    var relative_b: CGPoint = .init(x:  relative.y,  y: -relative.x)
+    var relative_a: CGPoint = .init(x: -relative.y,  y:  relative.x)
+    
+    relative_a = relative_a.mul(weight / 2).div(length)
+    relative_b = relative_b.mul(weight / 2).div(length)
+    
+    self.origin = p
+    self.a = origin.add(relative_a)
+    self.b = origin.add(relative_b)
+  }
+  
+  private init() {
+    self.origin = .zero
+    self.a = .zero
+    self.b = .zero
+    weight = .zero
   }
 }
