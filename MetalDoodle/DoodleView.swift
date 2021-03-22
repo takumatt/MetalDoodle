@@ -122,3 +122,35 @@ class DoodleBodyView: UIView {
     bezierPathLayer.path = path.cgPath
   }
 }
+
+class PointBuffer {
+  
+  private var points: [WeightedPoint]
+  private let bufferSize: Int
+  
+  private let _flush: () -> Void
+  
+  init(
+    points: [WeightedPoint] = [],
+    bufferSize: Int = 4,
+    flush: @escaping () -> Void
+  ) {
+    self.points = points
+    self.bufferSize = bufferSize
+    self._flush = flush
+  }
+  
+  func addPoint(_ point: WeightedPoint) {
+    
+    points.append(point)
+    
+    if points.count >= bufferSize {
+      flush()
+      points = []
+    }
+  }
+  
+  func flush() {
+    self._flush()
+  }
+}
