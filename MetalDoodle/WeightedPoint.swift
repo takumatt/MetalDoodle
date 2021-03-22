@@ -7,6 +7,21 @@
 
 import CoreGraphics
 
+/// This wraps UIKit's y-down coordinate system CGPoint
+/// and provides standard y-up value in Cartesian coordinate-system.
+struct YUpCGPoint {
+  
+  // NOTE: これ使えばもっとわかりやすい計算にできるかも
+  
+  let cgPoint: CGPoint
+  let point: CGPoint
+  
+  init(cgPoint: CGPoint, viewHeight: CGFloat) {
+    self.cgPoint = cgPoint
+    self.point = .init(x: cgPoint.x, y: cgPoint.y)
+  }
+}
+
 struct WeightedPoint {
   
   static let baseWeight: CGFloat = 5.0
@@ -22,8 +37,7 @@ struct WeightedPoint {
   
   init(
     current  p: CGPoint,
-    previous q: CGPoint,
-    height: CGFloat
+    previous q: CGPoint
   ) {
     
     let relative = p.distance(to: q)
@@ -32,7 +46,6 @@ struct WeightedPoint {
     weight: do {
       let lengthForWeight = length > Self.maxLength ? Self.maxLength : length
       self.weight = Self.baseWeight - lengthForWeight * 0.1
-      print("### \(lengthForWeight) \(weight)")
     }
     
     weightedPoint: do {
