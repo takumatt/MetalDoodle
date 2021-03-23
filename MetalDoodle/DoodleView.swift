@@ -44,6 +44,8 @@ class DoodleBodyView: UIView {
   private var path: UIBezierPath = .init()
   private var previousPoint: WeightedPoint = .zero
   
+  private var drawingPath: UIBezierPath? = nil
+  
   init() {
     super.init(frame: .zero)
     
@@ -87,21 +89,8 @@ class DoodleBodyView: UIView {
     
     let weightedPoint = WeightedPoint(current: point, previous: previousPoint.origin, weightProvider: weightProvider)
     
-//    let rect = UIBezierPath(rect: .init(x: weightedPoint.origin.x - 1, y: weightedPoint.origin.y - 1, width: 2, height: 2))
-//    UIColor.red.setFill()
-//    rect.fill()
-//    path.append(rect)
-//
-//    let rectA = UIBezierPath(rect: .init(x: weightedPoint.a.x - 1, y: weightedPoint.a.y - 1, width: 2, height: 2))
-//    UIColor.green.setFill()
-//    rect.fill()
-//    path.append(rectA)
-//
-//    let rectB = UIBezierPath(rect: .init(x: weightedPoint.b.x - 1, y: weightedPoint.b.y - 1, width: 2, height: 2))
-//    UIColor.blue.setFill()
-//    rect.fill()
-//    path.append(rectB)
-    
+    // addDebugRect(weightedPoint: weightedPoint)
+        
     path.move(to: previousPoint.a)
     path.addLine(to: previousPoint.b)
     path.addLine(to: weightedPoint.b)
@@ -121,6 +110,24 @@ class DoodleBodyView: UIView {
     
     bezierPathLayer.path = path.cgPath
   }
+  
+  private func addDebugRect(weightedPoint: WeightedPoint) {
+    
+    let rect = UIBezierPath(rect: .init(x: weightedPoint.origin.x - 1, y: weightedPoint.origin.y - 1, width: 2, height: 2))
+    UIColor.red.setFill()
+    rect.fill()
+    path.append(rect)
+    
+    let rectA = UIBezierPath(rect: .init(x: weightedPoint.a.x - 1, y: weightedPoint.a.y - 1, width: 2, height: 2))
+    UIColor.green.setFill()
+    rect.fill()
+    path.append(rectA)
+    
+    let rectB = UIBezierPath(rect: .init(x: weightedPoint.b.x - 1, y: weightedPoint.b.y - 1, width: 2, height: 2))
+    UIColor.blue.setFill()
+    rect.fill()
+    path.append(rectB)
+  }
 }
 
 class PointBuffer {
@@ -128,15 +135,23 @@ class PointBuffer {
   private var points: [WeightedPoint]
   private let bufferSize: Int
   
-  private let _flush: () -> Void
+  private let flushWhenFull: Bool
+  
+  private let _flush: ([WeightedPoint]) -> Void
+  
+  var isFull: Bool {
+    return points.count >= bufferSize
+  }
   
   init(
     points: [WeightedPoint] = [],
     bufferSize: Int = 4,
-    flush: @escaping () -> Void
+    flushWhenFull: Bool = true,
+    flush: @escaping ([WeightedPoint]) -> Void
   ) {
     self.points = points
     self.bufferSize = bufferSize
+    self.flushWhenFull = flushWhenFull
     self._flush = flush
   }
   
@@ -144,13 +159,58 @@ class PointBuffer {
     
     points.append(point)
     
-    if points.count >= bufferSize {
+    if flushWhenFull,
+      points.count >= bufferSize {
       flush()
-      points = []
     }
   }
   
+  func peek() -> [WeightedPoint] {
+    return points
+  }
+  
   func flush() {
-    self._flush()
+    self._flush(points)
+    points = []
+  }
+}
+
+
+// protocolにするかも
+enum BezierPathCreator {
+  
+  private static func createLine(
+    a: WeightedPoint,
+    b: WeightedPoint
+  ) -> UIBezierPath {
+    return .init()
+  }
+  
+  private static func createCurve(
+    a: WeightedPoint,
+    b: WeightedPoint,
+    c: WeightedPoint
+  ) -> UIBezierPath {
+    return .init()
+  }
+  
+  private static func createQuadCurve(
+    a: WeightedPoint,
+    b: WeightedPoint,
+    c: WeightedPoint,
+    d: WeightedPoint
+  ) -> UIBezierPath {
+    return .init()
+  }
+  
+  private static func interpolation(weightedPoint: [WeightedPoint]) -> [WeightedPoint] {
+    return []
+  }
+  
+  static func generate(weightedPoint: [WeightedPoint]) -> UIBezierPath {
+    
+    let bezierPath: UIBezierPath = .init()
+    
+    return bezierPath
   }
 }
