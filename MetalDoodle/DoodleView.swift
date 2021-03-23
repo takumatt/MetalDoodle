@@ -176,17 +176,17 @@ class PointBuffer {
 }
 
 
-// protocolにするかも
-enum BezierPathCreator {
+// protocolにするかも、bufferも参照するかも
+enum BezierPathGenerator {
   
-  private static func createLine(
+  private static func generateLine(
     a: WeightedPoint,
     b: WeightedPoint
   ) -> UIBezierPath {
     return .init()
   }
   
-  private static func createCurve(
+  private static func generateCurve(
     a: WeightedPoint,
     b: WeightedPoint,
     c: WeightedPoint
@@ -194,7 +194,7 @@ enum BezierPathCreator {
     return .init()
   }
   
-  private static func createQuadCurve(
+  private static func generateQuadCurve(
     a: WeightedPoint,
     b: WeightedPoint,
     c: WeightedPoint,
@@ -209,8 +209,38 @@ enum BezierPathCreator {
   
   static func generate(weightedPoint: [WeightedPoint]) -> UIBezierPath {
     
-    let bezierPath: UIBezierPath = .init()
+    precondition(weightedPoint.count > 1)
     
-    return bezierPath
+    switch weightedPoint.count {
+    case 2:
+      return Self.generateLine(
+        a: weightedPoint[0],
+        b: weightedPoint[1]
+      )
+    case 3:
+      return Self.generateCurve(
+        a: weightedPoint[0],
+        b: weightedPoint[1],
+        c: weightedPoint[2]
+      )
+    case 4:
+      return Self.generateQuadCurve(
+        a: weightedPoint[0],
+        b: weightedPoint[1],
+        c: weightedPoint[2],
+        d: weightedPoint[3]
+      )
+    case 5...Int.max:
+      let interpolatedPoints = Self.interpolation(weightedPoint: weightedPoint)
+      return Self.generateQuadCurve(
+        a: interpolatedPoints[0],
+        b: interpolatedPoints[1],
+        c: interpolatedPoints[2],
+        d: interpolatedPoints[3]
+      )
+    default:
+      assertionFailure()
+      return .init()
+    }
   }
 }
