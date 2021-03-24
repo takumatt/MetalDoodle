@@ -105,6 +105,21 @@ struct WeightedPoint {
     self.b = origin.add(relative_b)
   }
   
+  init(
+    origin: CGPoint,
+    a: CGPoint,
+    b: CGPoint,
+    weight: CGFloat
+  ) {
+    self.origin = origin
+    self.a = a
+    self.b = b
+    self.weight = weight
+    
+    _id += 1
+    id = _id
+  }
+  
   private init() {
     self.origin = .zero
     self.a = .zero
@@ -113,5 +128,25 @@ struct WeightedPoint {
     
     _id += 1
     self.id = _id
+  }
+}
+
+extension WeightedPoint {
+  
+  func average(with p: WeightedPoint, and q: WeightedPoint) -> Self {
+    
+    let _origin = self.origin.average(with: p.origin).average(with: q.origin)
+    let _a = self.a.average(with: p.a).average(with: q.a)
+    let _b = self.b.average(with: p.b).average(with: q.b)
+    // not accurate
+    let _weight = (self.weight + p.weight + q.weight) / 3
+    
+    return .init(
+      origin: _origin,
+      a: _a,
+      b: _b,
+      weight: _weight
+    )
+
   }
 }

@@ -235,11 +235,13 @@ enum BezierPathGenerator {
     
     let path: UIBezierPath = .init()
     
+    let modB: WeightedPoint = b.average(with: a, and: c)
+    
     path.move(to: a.a)
     path.addLine(to: a.b)
-    path.addQuadCurve(to: c.b, controlPoint: b.b)
+    path.addQuadCurve(to: c.b, controlPoint: modB.b)
     path.addLine(to: c.a)
-    path.addQuadCurve(to: a.a, controlPoint: b.a)
+    path.addQuadCurve(to: a.a, controlPoint: modB.a)
     
     return path
   }
@@ -253,11 +255,14 @@ enum BezierPathGenerator {
     
     let path: UIBezierPath = .init()
     
+    let modB = b.average(with: a, and: c)
+    let modC = c.average(with: b, and: d)
+    
     path.move(to: a.a)
     path.addLine(to: a.b)
-    path.addCurve(to: d.b, controlPoint1: b.b, controlPoint2: c.b)
+    path.addCurve(to: d.b, controlPoint1: modB.b, controlPoint2: modC.b)
     path.addLine(to: d.a)
-    path.addCurve(to: a.a, controlPoint1: c.a, controlPoint2: b.a)
+    path.addCurve(to: a.a, controlPoint1: modC.a, controlPoint2: modB.a)
     
     return path
   }
