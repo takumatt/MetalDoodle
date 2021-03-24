@@ -55,6 +55,13 @@ class DoodleBodyView: UIView {
       flushWhenFull: true,
       flush: { [weak self] points in
         print(points.map { String($0.id) }.reduce("points", { $0 + "," + $1 }))
+        
+        print("---")
+        points.forEach { p in
+          print("a and b:", p.a, p.b)
+        }
+        print("---")
+        
         let generatedPath = BezierPathGenerator.generate(weightedPoint: points)
         self?.path.append(generatedPath)
       },

@@ -80,6 +80,15 @@ struct WeightedPoint {
     _id += 1
     self.id = _id
     
+    guard q != .zero else {
+      // FIXME: temporary
+      self.weight = .zero
+      self.origin = p
+      self.a = p
+      self.b = p
+      return
+    }
+    
     let relative = p.distance(to: q)
     let length = p.euclideanDistance(to: q)
     
