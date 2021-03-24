@@ -186,7 +186,7 @@ enum BezierPathGenerator {
     return .init()
   }
   
-  private static func generateCurve(
+  private static func generateQuadCurve(
     a: WeightedPoint,
     b: WeightedPoint,
     c: WeightedPoint
@@ -194,7 +194,7 @@ enum BezierPathGenerator {
     return .init()
   }
   
-  private static func generateQuadCurve(
+  private static func generateCurve(
     a: WeightedPoint,
     b: WeightedPoint,
     c: WeightedPoint,
@@ -218,13 +218,13 @@ enum BezierPathGenerator {
         b: weightedPoint[1]
       )
     case 3:
-      return Self.generateCurve(
+      return Self.generateQuadCurve(
         a: weightedPoint[0],
         b: weightedPoint[1],
         c: weightedPoint[2]
       )
     case 4:
-      return Self.generateQuadCurve(
+      return Self.generateCurve(
         a: weightedPoint[0],
         b: weightedPoint[1],
         c: weightedPoint[2],
@@ -232,7 +232,7 @@ enum BezierPathGenerator {
       )
     case 5...Int.max:
       let interpolatedPoints = Self.interpolation(weightedPoint: weightedPoint)
-      return Self.generateQuadCurve(
+      return Self.generateCurve(
         a: interpolatedPoints[0],
         b: interpolatedPoints[1],
         c: interpolatedPoints[2],
