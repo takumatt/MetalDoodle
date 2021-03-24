@@ -35,14 +35,8 @@ extension WeightProvider {
   
   func weight(distance: CGFloat) -> CGFloat {
     
-    let gain: CGFloat = 3
-    
-    func sigmoid(x: CGFloat) -> CGFloat {
-      (tanh(gain * x / 2) + 1) / 2
-    }
-    
     let mapped = (distance - max) / max
-    let weight = base * sigmoid(x: -mapped)
+    let weight = base * tanh(-mapped)
     
     return weight
   }
@@ -57,7 +51,7 @@ class SimpleWeightProvider: WeightProvider {
   init(
     base: CGFloat = 10,
     min: CGFloat = 0,
-    max: CGFloat = 50
+    max: CGFloat = 100
   ) {
     self.base = base
     self.min = min
