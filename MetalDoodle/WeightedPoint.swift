@@ -65,6 +65,8 @@ class SimpleWeightProvider: WeightProvider {
   }
 }
 
+var _id = 0
+
 struct WeightedPoint {
   
   static let zero: Self = .init()
@@ -73,12 +75,16 @@ struct WeightedPoint {
   let a: CGPoint
   let b: CGPoint
   let weight: CGFloat
+  let id: Int
   
   init(
     current  p: CGPoint,
     previous q: CGPoint,
     weightProvider: WeightProvider
   ) {
+    
+    _id += 1
+    self.id = _id
     
     let relative = p.distance(to: q)
     let length = p.euclideanDistance(to: q)
@@ -100,6 +106,9 @@ struct WeightedPoint {
     self.origin = .zero
     self.a = .zero
     self.b = .zero
-    weight = .zero
+    self.weight = .zero
+    
+    _id += 1
+    self.id = _id
   }
 }

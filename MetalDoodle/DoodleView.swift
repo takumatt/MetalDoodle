@@ -32,14 +32,13 @@ struct DoodleView: UIViewRepresentable {
 class DoodleBodyView: UIView {
   
   private let bezierPathLayer: CAShapeLayer = {
-    
     let layer = CAShapeLayer()
-    layer.backgroundColor = UIColor.blue.cgColor
-    
     return layer
   }()
   
   private let weightProvider: SimpleWeightProvider = .init()
+  
+  private var pointBuffer: PointBuffer!
   
   private var path: UIBezierPath = .init()
   private var previousPoint: WeightedPoint = .zero
@@ -47,7 +46,24 @@ class DoodleBodyView: UIView {
   private var drawingPath: UIBezierPath? = nil
   
   init() {
+    
     super.init(frame: .zero)
+    
+    self.pointBuffer = .init(
+      points: [],
+      bufferSize: 4,
+      flushWhenFull: true,
+      flush: { [weak self] points in
+        print(points.map { String($0.id) }.reduce("points", { $0 + "," + $1 }))
+        let generatedPath = BezierPathGenerator.generate(weightedPoint: points)
+        self?.path.append(generatedPath)
+      },
+      completion: { [weak self] points in
+        guard let self = self else { return }
+        guard let last = points.last else { return }
+        self.pointBuffer.addPoint(last)
+      }
+    )
     
     layer.addSublayer(bezierPathLayer)
   }
@@ -58,6 +74,7 @@ class DoodleBodyView: UIView {
   
   func clear() {
     path.removeAllPoints()
+    bezierPathLayer.path = path.cgPath
   }
   
   override func layoutSubviews() {
@@ -74,9 +91,11 @@ class DoodleBodyView: UIView {
     
     let point = touch.location(in: self)
     
-//    path.move(to: point)
+    let weightedPoint: WeightedPoint = .init(current: point, previous: previousPoint.origin, weightProvider: weightProvider)
     
-    previousPoint = .init(current: point, previous: previousPoint.origin, weightProvider: weightProvider)
+    pointBuffer.addPoint(weightedPoint)
+    
+    previousPoint = weightedPoint
   }
   
   override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -89,13 +108,7 @@ class DoodleBodyView: UIView {
     
     let weightedPoint = WeightedPoint(current: point, previous: previousPoint.origin, weightProvider: weightProvider)
     
-    // addDebugRect(weightedPoint: weightedPoint)
-        
-    path.move(to: previousPoint.a)
-    path.addLine(to: previousPoint.b)
-    path.addLine(to: weightedPoint.b)
-    path.addLine(to: weightedPoint.a)
-    path.addLine(to: previousPoint.a)
+    pointBuffer.addPoint(weightedPoint)
     
     previousPoint = weightedPoint
   }
@@ -109,6 +122,10 @@ class DoodleBodyView: UIView {
     let point = touch.location(in: self)
     
     bezierPathLayer.path = path.cgPath
+    
+    pointBuffer.clear()
+    
+    previousPoint = .zero
   }
   
   private func addDebugRect(weightedPoint: WeightedPoint) {
@@ -138,6 +155,7 @@ class PointBuffer {
   private let flushWhenFull: Bool
   
   private let _flush: ([WeightedPoint]) -> Void
+  private let _completion: ([WeightedPoint]) -> Void
   
   var isFull: Bool {
     return points.count >= bufferSize
@@ -147,20 +165,21 @@ class PointBuffer {
     points: [WeightedPoint] = [],
     bufferSize: Int = 4,
     flushWhenFull: Bool = true,
-    flush: @escaping ([WeightedPoint]) -> Void
+    flush: @escaping ([WeightedPoint]) -> Void,
+    completion: @escaping ([WeightedPoint]) -> Void
   ) {
     self.points = points
     self.bufferSize = bufferSize
     self.flushWhenFull = flushWhenFull
     self._flush = flush
+    self._completion = completion
   }
   
   func addPoint(_ point: WeightedPoint) {
     
     points.append(point)
     
-    if flushWhenFull,
-      points.count >= bufferSize {
+    if flushWhenFull, isFull {
       flush()
     }
   }
@@ -169,9 +188,15 @@ class PointBuffer {
     return points
   }
   
-  func flush() {
-    self._flush(points)
+  func clear() {
     points = []
+  }
+  
+  func flush() {
+    _flush(points)
+    let copy = points
+    points = []
+    _completion(copy)
   }
 }
 
