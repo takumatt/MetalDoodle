@@ -183,7 +183,16 @@ enum BezierPathGenerator {
     a: WeightedPoint,
     b: WeightedPoint
   ) -> UIBezierPath {
-    return .init()
+    
+    let path: UIBezierPath = .init()
+    
+    path.move(to: a.a)
+    path.addLine(to: a.b)
+    path.addLine(to: b.b)
+    path.addLine(to: b.a)
+    path.addLine(to: a.a)
+    
+    return path
   }
   
   private static func generateQuadCurve(
@@ -191,7 +200,16 @@ enum BezierPathGenerator {
     b: WeightedPoint,
     c: WeightedPoint
   ) -> UIBezierPath {
-    return .init()
+    
+    let path: UIBezierPath = .init()
+    
+    path.move(to: a.a)
+    path.addLine(to: a.b)
+    path.addQuadCurve(to: c.b, controlPoint: b.b)
+    path.addLine(to: c.a)
+    path.addQuadCurve(to: a.a, controlPoint: b.a)
+    
+    return path
   }
   
   private static func generateCurve(
@@ -200,10 +218,20 @@ enum BezierPathGenerator {
     c: WeightedPoint,
     d: WeightedPoint
   ) -> UIBezierPath {
-    return .init()
+    
+    let path: UIBezierPath = .init()
+    
+    path.move(to: a.a)
+    path.addLine(to: a.b)
+    path.addCurve(to: d.b, controlPoint1: b.b, controlPoint2: c.b)
+    path.addLine(to: d.a)
+    path.addCurve(to: a.a, controlPoint1: c.a, controlPoint2: b.a)
+    
+    return path
   }
   
   private static func interpolation(weightedPoint: [WeightedPoint]) -> [WeightedPoint] {
+    assertionFailure()
     return []
   }
   
