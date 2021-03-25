@@ -138,14 +138,12 @@ extension WeightedPoint {
     let _origin = self.origin.average(with: p.origin).average(with: q.origin)
     let _a = self.a.average(with: p.a).average(with: q.a)
     let _b = self.b.average(with: p.b).average(with: q.b)
-    // not accurate
-    let _weight = (self.weight + p.weight + q.weight) / 3
     
     return .init(
       origin: _origin,
       a: _a,
       b: _b,
-      weight: _weight
+      weight: p.weight
     )
 
   }
@@ -155,14 +153,12 @@ extension WeightedPoint {
     let _origin = self.origin.average(with: p.origin)
     let _a = self.a.average(with: p.a)
     let _b = self.b.average(with: p.b)
-    // not accurate
-    let _weight = (self.weight + p.weight) / 2
     
     return .init(
       origin: _origin,
       a: _a,
       b: _b,
-      weight: _weight
+      weight: p.weight
     )
 
   }
