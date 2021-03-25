@@ -149,4 +149,21 @@ extension WeightedPoint {
     )
 
   }
+  
+  func average(with p: WeightedPoint) -> Self {
+    
+    let _origin = self.origin.average(with: p.origin)
+    let _a = self.a.average(with: p.a)
+    let _b = self.b.average(with: p.b)
+    // not accurate
+    let _weight = (self.weight + p.weight) / 2
+    
+    return .init(
+      origin: _origin,
+      a: _a,
+      b: _b,
+      weight: _weight
+    )
+
+  }
 }
