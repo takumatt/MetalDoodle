@@ -42,6 +42,7 @@ class DoodleBodyView: UIView {
   
   private var path: UIBezierPath = .init()
   private var previousPoint: WeightedPoint = .zero
+  private var previousBufferPoint: WeightedPoint? = nil
   
   private var drawingPath: UIBezierPath? = nil
   
@@ -62,13 +63,21 @@ class DoodleBodyView: UIView {
         }
         print("---")
         
-        let generatedPath = BezierPathGenerator.generate(weightedPoint: points)
+        let modPoints: [WeightedPoint]
+//        if let previousBufferPoint = self?.previousBufferPoint {
+//          modPoints = [points.first!.average(with: previousBufferPoint), points[1], points[2], points[3]]
+//        } else {
+        modPoints = points
+//        }
+        
+        let generatedPath = BezierPathGenerator.generate(weightedPoint: modPoints)
         self?.path.append(generatedPath)
       },
       completion: { [weak self] points in
         guard let self = self else { return }
         guard let last = points.last else { return }
         self.pointBuffer.addPoint(last)
+        self.previousBufferPoint = points[2]
       }
     )
     
@@ -135,6 +144,7 @@ class DoodleBodyView: UIView {
     pointBuffer.clear()
     
     previousPoint = .zero
+    previousBufferPoint = nil
   }
   
   private func addDebugRect(weightedPoint: WeightedPoint) {
