@@ -115,6 +115,8 @@ class DoodleBodyView: UIView {
     
     let weightedPoint = WeightedPoint(current: point, previous: previousPoint.origin, weightProvider: weightProvider)
     
+    // addDebugRect(weightedPoint: weightedPoint)
+    
     pointBuffer.addPoint(weightedPoint)
     
     previousPoint = weightedPoint
