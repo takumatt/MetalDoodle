@@ -55,13 +55,6 @@ class DoodleBodyView: UIView {
       bufferSize: 4,
       flushWhenFull: true,
       flush: { [weak self] points in
-        print(points.map { String($0.id) }.reduce("points", { $0 + "," + $1 }))
-        
-        print("---")
-        points.forEach { p in
-          print("a and b:", p.a, p.b)
-        }
-        print("---")
         
         let modPoints: [WeightedPoint]
 //        if let previousBufferPoint = self?.previousBufferPoint {
