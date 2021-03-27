@@ -41,8 +41,9 @@ class DoodleBodyView: UIView {
   private var pointBuffer: PointBuffer!
   
   private var path: UIBezierPath = .init()
+  
   private var previousPoint: WeightedPoint = .zero
-  private var previousBufferPoint: WeightedPoint? = nil
+  private var previousBuffer: [WeightedPoint]? = nil
   
   private var drawingPath: UIBezierPath? = nil
   
@@ -54,24 +55,45 @@ class DoodleBodyView: UIView {
       points: [],
       bufferSize: 4,
       flushWhenFull: true,
-      flush: { [weak self] points in
+      flush: { [weak self] buffer in
         
-        let modPoints: [WeightedPoint]
-//        if let previousBufferPoint = self?.previousBufferPoint {
-//          modPoints = [points.first!.average(with: previousBufferPoint), points[1], points[2], points[3]]
-//        } else {
-        modPoints = points
-//        }
-        
-        let generatedPath = BezierPathGenerator.generate(weightedPoint: modPoints)
-        self?.path.append(generatedPath)
-      },
-      completion: { [weak self] points in
         guard let self = self else { return }
-        guard let last = points.last else { return }
-        self.pointBuffer.addPoint(last)
-        self.previousBufferPoint = points[2]
-      }
+        
+        let points: [WeightedPoint]
+        let previousPoints: [WeightedPoint]?
+        
+        if let previousBuffer = self.previousBuffer {
+          
+          let modified = buffer[0].average(with: previousBuffer.last!)
+              
+          previousPoints = [
+            previousBuffer[0],
+            previousBuffer[1],
+            previousBuffer[2],
+            modified
+          ]
+          
+          points = [
+            modified,
+            buffer[1],
+            buffer[2],
+            buffer[3]
+          ]
+        } else {
+          previousPoints = self.previousBuffer
+          points = buffer
+        }
+        
+        finalizePreviousBuffer: do {
+          if let previousPoints = previousPoints {
+            let generatedPath = BezierPathGenerator.generate(weightedPoint: previousPoints)
+//            self.path.append(generatedPath)
+          }
+        }
+        
+        self.previousBuffer = points
+      },
+      completion: { _ in }
     )
     
     layer.addSublayer(bezierPathLayer)
@@ -117,7 +139,7 @@ class DoodleBodyView: UIView {
     
     let weightedPoint = WeightedPoint(current: point, previous: previousPoint.origin, weightProvider: weightProvider)
     
-    // addDebugRect(weightedPoint: weightedPoint)
+     addDebugRect(weightedPoint: weightedPoint)
     
     pointBuffer.addPoint(weightedPoint)
     
@@ -137,7 +159,7 @@ class DoodleBodyView: UIView {
     pointBuffer.clear()
     
     previousPoint = .zero
-    previousBufferPoint = nil
+    previousBuffer = nil
   }
   
   private func addDebugRect(weightedPoint: WeightedPoint) {
