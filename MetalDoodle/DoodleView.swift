@@ -236,13 +236,16 @@ enum BezierPathGenerator {
     
     let path: UIBezierPath = .init()
     
-//    let modB: WeightedPoint = b.average(with: a, and: c)
+    let midAB = a.average(with: b)
+    let midBC = b.average(with: c)
     
     path.move(to: a.a)
     path.addLine(to: a.b)
-    path.addQuadCurve(to: c.b, controlPoint: b.b)
+    path.addQuadCurve(to: b.b, controlPoint: midAB.b)
+    path.addQuadCurve(to: c.b, controlPoint: midBC.b)
     path.addLine(to: c.a)
-    path.addQuadCurve(to: a.a, controlPoint: b.a)
+    path.addQuadCurve(to: b.a, controlPoint: midBC.a)
+    path.addQuadCurve(to: a.a, controlPoint: midAB.a)
     
     return path
   }
@@ -256,14 +259,17 @@ enum BezierPathGenerator {
     
     let path: UIBezierPath = .init()
     
-//    let modB = b.average(with: a, and: c)
-//    let modC = c.average(with: b, and: d)
+    let midAB = a.average(with: b)
+    let midBC = b.average(with: c)
+    let midCD = c.average(with: d)
     
     path.move(to: a.a)
     path.addLine(to: a.b)
-    path.addCurve(to: d.b, controlPoint1: b.b, controlPoint2: c.b)
+    path.addCurve(to: midBC.b, controlPoint1: midAB.b, controlPoint2: b.b)
+    path.addCurve(to: d.b, controlPoint1: c.b, controlPoint2: midCD.b)
     path.addLine(to: d.a)
-    path.addCurve(to: a.a, controlPoint1: c.a, controlPoint2: c.a)
+    path.addCurve(to: midBC.a, controlPoint1: midCD.a, controlPoint2: c.a)
+    path.addCurve(to: a.a, controlPoint1: b.a, controlPoint2: midAB.a)
     
     return path
   }
