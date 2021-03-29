@@ -35,13 +35,14 @@ extension WeightProvider {
   
   func weight(distance: CGFloat) -> CGFloat {
     
-//    let mapped = (distance - max) / max
-    let weight = base * tanh(distance)
+    let gain: CGFloat = 3
+    let amp = 2 / (atan(gain * distance / 2) + 1)
+    let weight = base * amp
     
     guard weight > min else {
       return min
     }
-    
+
     guard weight < max else {
       return max
     }
@@ -79,91 +80,91 @@ struct WeightedPoint {
   let weight: CGFloat
   let id: Int
   
-  init(
-    current  p: CGPoint,
-    previous q: CGPoint,
-    weightProvider: WeightProvider
-  ) {
-    
-    _id += 1
-    self.id = _id
-    
-    guard q != .zero else {
-      // FIXME: temporary
-      self.weight = .zero
-      self.origin = p
-      self.a = p
-      self.b = p
-      return
-    }
-    
-    let relative = p.distance(to: q)
-    let length = p.euclideanDistance(to: q)
-    
-    self.weight = weightProvider.weight(distance: length)
-    
-    var relative_b: CGPoint = .init(x:  relative.y,  y: -relative.x)
-    var relative_a: CGPoint = .init(x: -relative.y,  y:  relative.x)
-    
-    // XXX: weight is refered, but not respected
-    relative_a = relative_a.mul(weight / 2).div(length)
-    relative_b = relative_b.mul(weight / 2).div(length)
-    
-    self.origin = p
-    self.a = origin.add(relative_a)
-    self.b = origin.add(relative_b)
-  }
+//  init(
+//    current  p: CGPoint,
+//    previous q: CGPoint,
+//    weightProvider: WeightProvider
+//  ) {
+//
+//    _id += 1
+//    self.id = _id
+//
+//    guard q != .zero else {
+//      // FIXME: temporary
+//      self.weight = .zero
+//      self.origin = p
+//      self.a = p
+//      self.b = p
+//      return
+//    }
+//
+//    let relative = p.distance(to: q)
+//    let length = p.euclideanDistance(to: q)
+//
+//    self.weight = weightProvider.weight(distance: length)
+//
+//    var relative_b: CGPoint = .init(x:  relative.y,  y: -relative.x)
+//    var relative_a: CGPoint = .init(x: -relative.y,  y:  relative.x)
+//
+//    // XXX: weight is refered, but not respected
+//    relative_a = relative_a.mul(weight / 2).div(length)
+//    relative_b = relative_b.mul(weight / 2).div(length)
+//
+//    self.origin = p
+//    self.a = origin.add(relative_a)
+//    self.b = origin.add(relative_b)
+//  }
   
   // 没
-  //  init(
-  //    current  p: CGPoint,
-  //    previous q: CGPoint,
-  //    weightProvider: WeightProvider
-  //  ) {
-  //
-  //    _id += 1
-  //    self.id = _id
-  //
-  //    guard q != .zero else {
-  //      // FIXME: temporary
-  //      self.weight = .zero
-  //      self.origin = p
-  //      self.a = p
-  //      self.b = p
-  //      return
-  //    }
-  //
-  //    let relative = p.distance(to: q)
-  //    let length = p.euclideanDistance(to: q)
-  //
-  //    self.weight = weightProvider.weight(distance: length)
-  //
-  //    let xSign: CGFloat = (relative.x < 0) ? -1 : 1
-  //    let ySign: CGFloat = (relative.y < 0) ? -1 : 1
-  //
-  //    let relativeForCalculation: CGPoint = .init(
-  //      x: abs(relative.x),
-  //      y: abs(relative.y)
-  //    )
-  //
-  //    let hypotenuse = weight / 2
-  //    let theta = atan(relativeForCalculation.y / relativeForCalculation.x)
-  //
-  //    let relativeX = hypotenuse * cos(theta) * xSign
-  //    let relativeY = hypotenuse * sin(theta) * ySign
-  //    var relative_a: CGPoint = .init(x:  relativeX, y: -relativeY)
-  //    var relative_b: CGPoint = .init(x: -relativeX, y:  relativeY)
-  //
-  //    if xSign < 0, ySign < 0 {
-  //      let tmp = relative_a
-  //      relative_a = relative_b
-  //      relative_b = tmp
-  //    }
-  //
-  //    self.origin = p
-  //    self.a = origin.add(relative_a)
-  //    self.b = origin.add(relative_b)
-  //  }
+    init(
+      current  p: CGPoint,
+      previous q: CGPoint,
+      weightProvider: WeightProvider
+    ) {
+  
+      _id += 1
+      self.id = _id
+  
+      guard q != .zero else {
+        // FIXME: temporary
+        self.weight = .zero
+        self.origin = p
+        self.a = p
+        self.b = p
+        return
+      }
+  
+      let relative = p.distance(to: q)
+      let length = p.euclideanDistance(to: q)
+  
+      self.weight = weightProvider.weight(distance: length)
+  
+      let xSign: CGFloat = (relative.x < 0) ? -1 : 1
+      let ySign: CGFloat = (relative.y < 0) ? -1 : 1
+  
+      let relativeForCalculation: CGPoint = .init(
+        x: abs(relative.x),
+        y: abs(relative.y)
+      )
+  
+      let hypotenuse = weight / 2
+      let theta = atan(relativeForCalculation.y / relativeForCalculation.x)
+  
+      let relativeX = hypotenuse * cos(theta) * xSign
+      let relativeY = hypotenuse * sin(theta) * ySign
+      var relative_a: CGPoint = .init(x:  relativeX, y: -relativeY)
+      var relative_b: CGPoint = .init(x: -relativeX, y:  relativeY)
+  
+      if xSign < 0, ySign < 0 {
+        let tmp = relative_a
+        relative_a = relative_b
+        relative_b = tmp
+      }
+  
+      self.origin = p
+      self.a = origin.add(relative_a)
+      self.b = origin.add(relative_b)
+    }
   
   init(
     origin: CGPoint,
