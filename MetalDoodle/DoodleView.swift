@@ -59,41 +59,15 @@ class DoodleBodyView: UIView {
         
         guard let self = self else { return }
         
-        let points: [WeightedPoint]
-        let previousPoints: [WeightedPoint]?
-        
-        if let previousBuffer = self.previousBuffer {
-          
-          let modified = buffer[0].average(with: previousBuffer.last!)
-              
-          previousPoints = [
-            previousBuffer[0],
-            previousBuffer[1],
-            previousBuffer[2],
-            modified
-          ]
-          
-          points = [
-            modified,
-            buffer[1],
-            buffer[2],
-            buffer[3]
-          ]
-        } else {
-          previousPoints = self.previousBuffer
-          points = buffer
+        finalize: do {
+          let generatedPath = BezierPathGenerator.generate(weightedPoint: buffer)
+          self.path.append(generatedPath)
         }
-        
-        finalizePreviousBuffer: do {
-          if let previousPoints = previousPoints {
-            let generatedPath = BezierPathGenerator.generate(weightedPoint: previousPoints)
-//            self.path.append(generatedPath)
-          }
-        }
-        
-        self.previousBuffer = points
       },
-      completion: { _ in }
+      completion: { [weak self] buffer in
+        guard let self = self else { return }
+        self.pointBuffer.addPoint(buffer[3])
+      }
     )
     
     layer.addSublayer(bezierPathLayer)
@@ -139,7 +113,7 @@ class DoodleBodyView: UIView {
     
     let weightedPoint = WeightedPoint(current: point, previous: previousPoint.origin, weightProvider: weightProvider)
     
-     addDebugRect(weightedPoint: weightedPoint)
+//     addDebugRect(weightedPoint: weightedPoint)
     
     pointBuffer.addPoint(weightedPoint)
     
@@ -262,13 +236,13 @@ enum BezierPathGenerator {
     
     let path: UIBezierPath = .init()
     
-    let modB: WeightedPoint = b.average(with: a, and: c)
+//    let modB: WeightedPoint = b.average(with: a, and: c)
     
     path.move(to: a.a)
     path.addLine(to: a.b)
-    path.addQuadCurve(to: c.b, controlPoint: modB.b)
+    path.addQuadCurve(to: c.b, controlPoint: b.b)
     path.addLine(to: c.a)
-    path.addQuadCurve(to: a.a, controlPoint: modB.a)
+    path.addQuadCurve(to: a.a, controlPoint: b.a)
     
     return path
   }
@@ -282,14 +256,14 @@ enum BezierPathGenerator {
     
     let path: UIBezierPath = .init()
     
-    let modB = b.average(with: a, and: c)
-    let modC = c.average(with: b, and: d)
+//    let modB = b.average(with: a, and: c)
+//    let modC = c.average(with: b, and: d)
     
     path.move(to: a.a)
     path.addLine(to: a.b)
-    path.addCurve(to: d.b, controlPoint1: modB.b, controlPoint2: modC.b)
+    path.addCurve(to: d.b, controlPoint1: b.b, controlPoint2: c.b)
     path.addLine(to: d.a)
-    path.addCurve(to: a.a, controlPoint1: modC.a, controlPoint2: modB.a)
+    path.addCurve(to: a.a, controlPoint1: c.a, controlPoint2: c.a)
     
     return path
   }
