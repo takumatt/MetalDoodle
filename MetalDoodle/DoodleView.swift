@@ -139,18 +139,18 @@ class DoodleBodyView: UIView {
   private func addDebugRect(weightedPoint: WeightedPoint) {
     
     let rect = UIBezierPath(rect: .init(x: weightedPoint.origin.x - 1, y: weightedPoint.origin.y - 1, width: 2, height: 2))
-    UIColor.red.setFill()
-    rect.fill()
+    UIColor.red.setStroke()
+    rect.stroke()
     path.append(rect)
     
     let rectA = UIBezierPath(rect: .init(x: weightedPoint.a.x - 1, y: weightedPoint.a.y - 1, width: 2, height: 2))
-    UIColor.green.setFill()
-    rect.fill()
+    UIColor.green.setStroke()
+    rect.stroke()
     path.append(rectA)
     
     let rectB = UIBezierPath(rect: .init(x: weightedPoint.b.x - 1, y: weightedPoint.b.y - 1, width: 2, height: 2))
-    UIColor.blue.setFill()
-    rect.fill()
+    UIColor.blue.setStroke()
+    rect.stroke()
     path.append(rectB)
   }
 }

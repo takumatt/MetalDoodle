@@ -18,7 +18,7 @@ struct YUpCGPoint {
   
   init(cgPoint: CGPoint, viewHeight: CGFloat) {
     self.cgPoint = cgPoint
-    self.point = .init(x: cgPoint.x, y: cgPoint.y)
+    self.point = .init(x: cgPoint.x, y: -cgPoint.y)
   }
 }
 
@@ -154,11 +154,18 @@ struct WeightedPoint {
         let relativeX = hypotenuse * cos(theta)
         let relativeY = hypotenuse * sin(theta)
         
-        var relative_a: CGPoint = .init(x: -(xSign * ySign) * relativeX, y: (xSign * ySign) * relativeY)
-        var relative_b: CGPoint = .init(x: (xSign * ySign) * relativeX, y: -(xSign * ySign) * relativeY)
+        // weird
+        var relative_a: CGPoint = .init(x: (xSign * ySign) * relativeX, y: -(xSign * ySign) * relativeY)
+        var relative_b: CGPoint = .init(x: -(xSign * ySign) * relativeX, y: (xSign * ySign) * relativeY)
+        
+        if relative_a.x < 0.01 && relative_b.x < 0.01 || relative_b.y < 0.01 && relative_b.y < 0.01 {
+          relative_a = .init(x: relative_a.y, y: relative_a.x)
+          relative_b = .init(x: relative_b.y, y: relative_b.x)
+        }
+        //
         
         self.origin = p
-        print("### \(relative_a) \(relative_b) -> \(origin) \(origin.add(relative_a)) \(origin.add(relative_b)))")
+        print("### \(xSign) \(ySign) \(relativeX) \(relativeY)")
         self.a = origin.add(relative_a)
         self.b = origin.add(relative_b)
       }
