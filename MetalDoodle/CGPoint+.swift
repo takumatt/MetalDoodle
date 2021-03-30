@@ -16,6 +16,13 @@ extension CGPoint {
     )
   }
   
+  func sub(_ point: CGPoint) -> CGPoint {
+    .init(
+      x: x - point.x,
+      y: y - point.y
+    )
+  }
+  
   func mul(_ value: CGFloat) -> CGPoint {
     .init(
       x: x * value,

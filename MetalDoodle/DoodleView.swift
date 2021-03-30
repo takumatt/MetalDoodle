@@ -61,7 +61,7 @@ class DoodleBodyView: UIView {
         
         finalize: do {
           let generatedPath = BezierPathGenerator.generate(weightedPoint: buffer)
-          self.path.append(generatedPath)
+//          self.path.append(generatedPath)
         }
       },
       completion: { [weak self] buffer in
@@ -113,7 +113,7 @@ class DoodleBodyView: UIView {
     
     let weightedPoint = WeightedPoint(current: point, previous: previousPoint.origin, weightProvider: weightProvider)
     
-//     addDebugRect(weightedPoint: weightedPoint)
+     addDebugRect(weightedPoint: weightedPoint)
     
     pointBuffer.addPoint(weightedPoint)
     
