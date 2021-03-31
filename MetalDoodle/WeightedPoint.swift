@@ -24,9 +24,9 @@ struct YUpCGPoint {
 
 protocol WeightProvider {
   
-  var base: CGFloat { get }
-  var min: CGFloat { get }
-  var max: CGFloat { get }
+  var baseWeight: CGFloat { get }
+  var minLength: CGFloat { get }
+  var maxLength: CGFloat { get }
   
   func weight(distance: CGFloat) -> CGFloat
 }
@@ -35,17 +35,11 @@ extension WeightProvider {
   
   func weight(distance: CGFloat) -> CGFloat {
     
-    let gain: CGFloat = 3
-    let amp = 2 / (atan(gain * distance / 2) + 1)
-    let weight = base * amp
+    let x = (distance - (maxLength - minLength) / 2) / (maxLength - minLength)
     
-    guard weight > min else {
-      return min
-    }
-
-    guard weight < max else {
-      return max
-    }
+    let gain: CGFloat = 0.5
+    let amp = 2 / (atan(gain * x / 2) + 1)
+    let weight = baseWeight * amp
     
     return weight
   }
@@ -53,18 +47,18 @@ extension WeightProvider {
 
 class SimpleWeightProvider: WeightProvider {
   
-  var base: CGFloat
-  var min: CGFloat
-  var max: CGFloat
+  var baseWeight: CGFloat
+  var minLength: CGFloat
+  var maxLength: CGFloat
   
   init(
-    base: CGFloat = 10,
-    min: CGFloat = 5,
-    max: CGFloat = 100
+    baseWeight: CGFloat = 3,
+    minLength: CGFloat = 5,
+    maxLength: CGFloat = 70
   ) {
-    self.base = base
-    self.min = min
-    self.max = max
+    self.baseWeight = baseWeight
+    self.minLength = minLength
+    self.maxLength = maxLength
   }
 }
 
