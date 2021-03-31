@@ -134,38 +134,35 @@ struct WeightedPoint {
           return
         }
         
-        let relative = q.distance(to: p)
         let length = q.euclideanDistance(to: p)
-  
+        let radian = Math.Linear.slope(through: p, and: q)
+        let radian_orthogonal = CGFloat.pi / 2 - radian
         self.weight = weightProvider.weight(distance: length)
   
-        let xSign: CGFloat = (relative.x < 0) ? -1 : 1
-        let ySign: CGFloat = (relative.y < 0) ? -1 : 1
-        
-  
-        let relativeForCalculation: CGPoint = .init(
-          x: abs(relative.x),
-          y: abs(relative.y)
-        )
-  
         let hypotenuse = weight / 2
-        let theta = atan(relativeForCalculation.y / relativeForCalculation.x)
-  
-        let relativeX = hypotenuse * cos(theta)
-        let relativeY = hypotenuse * sin(theta)
+        let relativeX = hypotenuse * cos(radian_orthogonal)
+        let relativeY = hypotenuse * sin(radian_orthogonal)
         
-        // weird
-        var relative_a: CGPoint = .init(x: (xSign * ySign) * relativeX, y: -(xSign * ySign) * relativeY)
-        var relative_b: CGPoint = .init(x: -(xSign * ySign) * relativeX, y: (xSign * ySign) * relativeY)
+        var relative_a: CGPoint = .init(x: -relativeX, y:  relativeY)
+        var relative_b: CGPoint = .init(x:  relativeX, y: -relativeY)
         
-        if relative_a.x < 0.01 && relative_b.x < 0.01 || relative_b.y < 0.01 && relative_b.y < 0.01 {
-          relative_a = .init(x: relative_a.y, y: relative_a.x)
-          relative_b = .init(x: relative_b.y, y: relative_b.x)
+        TODO: do {
+          
+          let shouldSwap: Bool
+          if p.distance(to: q).x < 0 {
+            shouldSwap = true
+          } else {
+            shouldSwap = false
+          }
+          
+          if shouldSwap {
+            let tmp = relative_a
+            relative_a = relative_b
+            relative_b = tmp
+          }
         }
-        //
         
         self.origin = p
-        print("### \(xSign) \(ySign) \(relativeX) \(relativeY)")
         self.a = origin.add(relative_a)
         self.b = origin.add(relative_b)
       }

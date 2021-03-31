@@ -143,7 +143,8 @@ class DoodleBodyView: UIView {
     rect.stroke()
     path.append(rect)
     
-    let rectA = UIBezierPath(rect: .init(x: weightedPoint.a.x - 1, y: weightedPoint.a.y - 1, width: 2, height: 2))
+//    let rectA = UIBezierPath(rect: .init(x: weightedPoint.a.x - 1, y: weightedPoint.a.y - 1, width: 2, height: 2))
+    let rectA = UIBezierPath(roundedRect: .init(x: weightedPoint.a.x - 1, y: weightedPoint.a.y - 1, width: 2, height: 2), byRoundingCorners: .allCorners, cornerRadii: .init(width: 2, height: 2))
     UIColor.green.setStroke()
     rect.stroke()
     path.append(rectA)
