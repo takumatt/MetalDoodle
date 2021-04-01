@@ -19,6 +19,7 @@
 		C350DC54260F5E6D00571B92 /* RingBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C350DC53260F5E6D00571B92 /* RingBuffer.swift */; };
 		C37616512606055E008756B5 /* CGPoint+.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37616502606055E008756B5 /* CGPoint+.swift */; };
 		C376165E260630A5008756B5 /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = C376165D260630A5008756B5 /* Math.swift */; };
+		C39A30FD2615F95B007872FE /* CubicCurveAlgorithm.swift in Sources */ = {isa = PBXBuildFile; fileRef = C39A30FC2615F95B007872FE /* CubicCurveAlgorithm.swift */; };
 		C3AFD432260655A2001EB1D6 /* WeightedPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3AFD431260655A2001EB1D6 /* WeightedPoint.swift */; };
 		C3AFD437260655C5001EB1D6 /* Misc.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3AFD436260655C5001EB1D6 /* Misc.swift */; };
 /* End PBXBuildFile section */
@@ -59,6 +60,7 @@
 		C350DC53260F5E6D00571B92 /* RingBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RingBuffer.swift; sourceTree = "<group>"; };
 		C37616502606055E008756B5 /* CGPoint+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGPoint+.swift"; sourceTree = "<group>"; };
 		C376165D260630A5008756B5 /* Math.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
+		C39A30FC2615F95B007872FE /* CubicCurveAlgorithm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CubicCurveAlgorithm.swift; sourceTree = "<group>"; };
 		C3AFD431260655A2001EB1D6 /* WeightedPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightedPoint.swift; sourceTree = "<group>"; };
 		C3AFD436260655C5001EB1D6 /* Misc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Misc.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -119,6 +121,7 @@
 				C3AFD431260655A2001EB1D6 /* WeightedPoint.swift */,
 				C350DC53260F5E6D00571B92 /* RingBuffer.swift */,
 				C376165D260630A5008756B5 /* Math.swift */,
+				C39A30FC2615F95B007872FE /* CubicCurveAlgorithm.swift */,
 				C3AFD436260655C5001EB1D6 /* Misc.swift */,
 				C339A76225F1EAC30024D048 /* Assets.xcassets */,
 				C339A76725F1EAC30024D048 /* LaunchScreen.storyboard */,
@@ -284,6 +287,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C39A30FD2615F95B007872FE /* CubicCurveAlgorithm.swift in Sources */,
 				C339A75D25F1EAC20024D048 /* AppDelegate.swift in Sources */,
 				C3AFD437260655C5001EB1D6 /* Misc.swift in Sources */,
 				C350DC54260F5E6D00571B92 /* RingBuffer.swift in Sources */,
